@@ -17,8 +17,9 @@ app.use(express.static('public'));
 
 // routes
 const UserRoutes = require('./routes/UserRoute');
+
 app.use('/users', UserRoutes);
 
-app.listen(port, () => {
+app.listen(3000, () => {
     console.log('Server is running');
 });
