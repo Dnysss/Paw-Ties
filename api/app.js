@@ -1,25 +1,27 @@
-const express = require('express');
-const cors = require('cors');
-require('dotenv').config;
+const express = require("express");
+const cors = require("cors");
+require("dotenv").config;
 
 const port = process.env.PORT;
 
-const app = express()
+const app = express();
 
 // config JSON response
-app.use(express.json())
+app.use(express.json());
 
 // solve CORS
 app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
 
 // public folder for images
-app.use(express.static('public'));
+app.use(express.static("public"));
 
 // routes
-const UserRoutes = require('./routes/UserRoute');
+const UserRoutes = require("./routes/UserRoute");
+const PetRoutes = require("./routes/PetRoutes");
 
-app.use('/users', UserRoutes);
+app.use("/users", UserRoutes);
+app.use("/pets", PetRoutes);
 
 app.listen(3000, () => {
-    console.log('Server is running');
+  console.log("Server is running");
 });

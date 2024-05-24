@@ -142,8 +142,8 @@ module.exports = class UserController {
     const { name, email, phone, password, confirmPassword } = req.body;
 
     // upload images
-    if(req.file) {
-        user.image = req.file.filename
+    if (req.file) {
+      user.image = req.file.filename;
     }
 
     if (!name) {
@@ -178,25 +178,25 @@ module.exports = class UserController {
     if (password != confirmPassword) {
       res.status(422).json({ message: "Passwords don't match" });
       return;
-    } else if(password === confirmPassword && password != null ) {
-        const salt = await bcrypt.genSalt(12);
-        const passwordHash = await bcrypt.hash(password, salt);
+    } else if (password === confirmPassword && password != null) {
+      const salt = await bcrypt.genSalt(12);
+      const passwordHash = await bcrypt.hash(password, salt);
 
-        user.password = passwordHash;
+      user.password = passwordHash;
     }
 
     try {
-        // return user updated data
-        await User.findOneAndUpdate(
-            {_id: user._id},
-            {$set: user},
-            {new : true}
-        );
+      // return user updated data
+      await User.findOneAndUpdate(
+        { _id: user._id },
+        { $set: user },
+        { new: true }
+      );
 
-        res.status(200).json({ message: "User updated successfully" });
+      res.status(200).json({ message: "User updated successfully" });
     } catch (err) {
-        res.status(500).json({ message: err });
-        return;
+      res.status(500).json({ message: err });
+      return;
     }
   }
 };
