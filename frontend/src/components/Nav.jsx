@@ -1,6 +1,7 @@
 import logo from "./../assets/images/logo.png"
 import { TiThMenu } from "react-icons/ti";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 function Nav() {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,9 +13,9 @@ function Nav() {
   return (
     <nav className="bg-[#F8D629]">
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <a href="#" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src={logo} className="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-18" alt="Paw Ties Logo" />
-        </a>
+        <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+          <img src={logo} className="h-9 sm:h-10 md:h-12 lg:h-12 xl:h-12" alt="Paw Ties Logo" />
+        </Link>
         <button
           onClick={toggleMenu}
           type="button"
@@ -50,20 +51,21 @@ function Nav() {
               </a>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/mypets"
                 className="block py-2 px-3 md:hover:bg-transparent md:border-0 text-[#002A48]  md:p-0 md:dark:hover:bg-transparent transition-all duration-300 hover:text-[#001F36]"
               >
                 My Pets
-              </a>
+                
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/profile"
                 className="block py-2 px-3 md:hover:bg-transparent md:border-0 text-[#002A48] md:p-0 md:dark:hover:bg-transparent transition-all duration-300 hover:text-[#001F36]"
               >
                 Profile
-              </a>
+              </Link>
             </li>
           </ul>
         </div>

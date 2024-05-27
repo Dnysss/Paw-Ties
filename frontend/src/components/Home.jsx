@@ -2,6 +2,7 @@ import React from "react";
 import { MdKeyboardArrowRight } from "react-icons/md";
 
 import { pets } from "./../data";
+import { Link } from "react-router-dom";
 
 function Home() {
   const { name, width, age, gender, img } = pets;
@@ -32,7 +33,15 @@ function Home() {
                 <p className="text-gray-500">Gênero: {pet.gender}</p>
                 <p className="text-gray-500">Idade: {pet.age}</p>
                 <p className="text-gray-500">{pet.width}</p>
-                <button type="button" class="text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-blue-800 mt-4">Adopt</button>
+                <Link to="/details">
+                <button
+                  type="button"
+                  className="text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:outline-none focus:ring-4 focus:ring-blue-300 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:focus:ring-blue-800 mt-4"
+                >
+                  
+                  More info
+                </button>
+                </Link>
               </div>
             </div>
           ))}

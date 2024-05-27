@@ -154,54 +154,7 @@ function Footer() {
               </ul>
             </div>
           </div>
-          <div className="w-full lg:max-w-md max-lg:mx-auto ">
-            <h6 className="text-lg font-medium text-[#002A48] mb-7">Newsletter</h6>
-            <div className="bg-[#002A48] rounded-3xl p-5">
-              <form action="#" className="flex flex-col gap-5">
-                <div className="relative">
-                  <label className="flex  items-center mb-2 text-gray-400 text-base font-medium">
-                    Email
-                  </label>
-                  <input
-                    type="text"
-                    id="default-search"
-                    className="block w-full px-5 py-3 text-lg font-normal shadow-xs text-white bg-transparent border border-gray-400 rounded-full placeholder-gray-400 focus:outline-none leading-relaxed focus-within:border-gray-300"
-                    placeholder="example@example.com"
-                    required=""
-                  />
-                </div>
-                <div className="flex flex-col min-[540px]:flex-row items-center justify-between gap-3">
-                  <div className="flex items-start black">
-                    <input
-                      id="checked-checkbox"
-                      type="checkbox"
-                      value=""
-                      className="w-5 h-5 aspect-square appearance-none cursor-pointer border border-gray-600 bg-transparent  rounded-md mr-2 hover:border-gray-400 hover:bg-gray-900 checked:bg-no-repeat checked:bg-center checked:border-gray-400 checked:bg-gray-800"
-                      checked=""
-                    />
-                    <label
-                      for="checked-checkbox"
-                      className="text-sm font-normal cursor-pointer text-gray-400"
-                    >
-                      I agree with{" "}
-                      <a href="#" className="text-amber-500">
-                        Privacy Policy
-                      </a>{" "}
-                      and{" "}
-                      <a href="#" className="text-amber-500">
-                        Terms of Condition
-                      </a>
-                    </label>
-                  </div>
-                  <input
-                    type="submit"
-                    value="Send"
-                    className="text-white text-base font-semibold py-3 px-7 rounded-full cursor-pointer bg-amber-500 transition-all duration-500 hover:bg-white hover:text-gray-900"
-                  />
-                </div>
-              </form>
-            </div>
-          </div>
+          
         </div>
         <div className="flex flex-col-reverse sm:flex-row items-center justify-between gap-5 pt-7">
           <span className="text-sm font-normal text-[#002A48]">
