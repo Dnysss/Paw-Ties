@@ -3,7 +3,7 @@ import { TiThMenu } from "react-icons/ti";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
-function Nav() {
+function Nav({ bgColorClass = "bg-[#F8D629]" }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -11,7 +11,7 @@ function Nav() {
   };
 
   return (
-    <nav className="bg-[#F8D629]">
+    <nav className={bgColorClass}>
       <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
         <Link to="/" className="flex items-center space-x-3 rtl:space-x-reverse">
           <img src={logo} className="h-9 sm:h-10 md:h-12 lg:h-12 xl:h-12" alt="Paw Ties Logo" />
@@ -34,21 +34,20 @@ function Nav() {
         >
           <ul className="font-medium flex flex-col p-4 md:p-0 mt-4 md:flex-row md:space-x-8 rtl:space-x-reverse md:mt-0">
             <li>
-              <a
-                href="#"
+              <Link to="/"
                 className="block py-2 px-3 md:hover:bg-transparent md:border-0 text-[#002A48]  md:p-0  md:dark:hover:bg-transparent transition-all duration-300 hover:text-[#001F36]"
                 aria-current="page"
               >
                 Adopt
-              </a>
+              </Link>
             </li>
             <li>
-              <a
-                href="#"
+              <Link
+                to="/myadopts"
                 className="block py-2 px-3 md:hover:bg-transparent md:border-0 text-[#002A48] md:p-0 md:dark:hover:bg-transparent transition-all duration-300 hover:text-[#001F36]"
               >
                 My Adopts
-              </a>
+              </Link>
             </li>
             <li>
               <Link
