@@ -33,6 +33,27 @@ function ModalPets() {
           </div>
           <div className="p-4 md:p-5 overflow-y-auto max-h-96">
             <form className="space-y-4" action="#">
+              <img
+                className="w-24 h-24 mb-3 rounded-lg shadow-lg"
+                src="#"
+                alt="image"
+              />
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900"
+                for="user_avatar"
+              >
+                Upload file
+              </label>
+
+              <div>
+                <input
+                  className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-gray-300 focus:outline-none border-gray-600 placeholder-gray-400"
+                  aria-describedby="user_avatar_help"
+                  id="user_avatar"
+                  type="file"
+                />
+              </div>
+              
               <div>
                 <label
                   htmlFor="name"
@@ -44,25 +65,25 @@ function ModalPets() {
                   type="text"
                   name="name"
                   id="name"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400 focus:outline-none focus:border-[#F8D629]"
+                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
                   placeholder="Enter Name"
                   required
                 />
               </div>
-              
+
               <div>
                 <label
-                  htmlFor="width"
+                  htmlFor="weight"
                   className="block mb-2 text-sm font-medium text-[#002A48]"
                 >
-                  Width
+                  Weight
                 </label>
                 <input
                   type="text"
-                  name="width"
-                  id="width"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400 focus:outline-none focus:border-[#F8D629]"
-                  placeholder="Enter Width"
+                  name="weight"
+                  id="weight"
+                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
+                  placeholder="Weight"
                   required
                 />
               </div>
@@ -78,8 +99,8 @@ function ModalPets() {
                   type="text"
                   name="gender"
                   id="gender"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400 focus:outline-none focus:border-[#F8D629]"
-                  placeholder="Enter Gender"
+                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
+                  placeholder="Gender"
                   required
                 />
               </div>
@@ -95,7 +116,7 @@ function ModalPets() {
                   type="text"
                   name="age"
                   id="age"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400 focus:outline-none focus:border-[#F8D629]"
+                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
                   placeholder="Enter Age"
                   required
                 />
@@ -106,42 +127,24 @@ function ModalPets() {
                   htmlFor="text"
                   className="block mb-2 text-sm font-medium text-[#002A48]"
                 >
-                  Your email
+                  Color
                 </label>
                 <input
                   type="text"
                   name="text"
                   id="text"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400 focus:outline-none focus:border-[#F8D629]"
-                  placeholder="Enter"
+                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
+                  placeholder="Color"
                   required
                 />
               </div>
 
-              <div>
-                <label
-                  htmlFor="text"
-                  className="block mb-2 text-sm font-medium text-[#002A48]"
-                >
-                  Your email
-                </label>
-                <input
-                  type="text"
-                  name="text"
-                  id="text"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400 focus:outline-none focus:border-[#F8D629]"
-                  placeholder="Enter"
-                  required
-                />
-              </div>
-              
               <button
                 type="submit"
                 className="w-full text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
               >
                 Register
               </button>
-              
             </form>
           </div>
         </div>

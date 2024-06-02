@@ -1,31 +1,9 @@
 const multer = require("multer");
-const path = require("path");
 
-// destination to store the images
-const imageStorage = multer.diskStorage({
-  destination: function (req, res, cb) {
-    let folder = "";
-
-    if (req.baseUrl.includes("users")) {
-      folder = "users";
-    } else if (req.baseUrl.includes("pets")) {
-      folder = "pets";
-    }
-
-    cb(null, `public/images/${folder}`);
-  },
-  filename: function (req, file, cb) {
-    cb(
-      null,
-      Date.now() +
-        String(Math.floor(Math.random() * 1000)) +
-        path.extname(file.originalname)
-    );
-  },
-});
-
+// Configurar o Multer para armazenar arquivos na memória
+const storage = multer.memoryStorage();
 const imageUpload = multer({
-  storage: imageStorage,
+  storage: storage,
   fileFilter(req, file, cb) {
     if (!file.originalname.match(/\.(png|jpg)$/)) {
       return cb(new Error("Please, only send png or jpg!"));

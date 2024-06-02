@@ -8,21 +8,28 @@ import Profile from "./components/Profile";
 import PetDetails from "./components/PetDetails";
 import MyAdopts from "./components/MyAdopts";
 import Pets from "./components/Pets";
+import Login from "./components/Auth/Login";
+import Register from "./components/Auth/Register";
+import { UserProvider } from "../context/UserContext";
 
 function App() {
   return (
     <Router>
-      <ModalProvider>
-        <Routes>
-          <Route path="/" element={<Content />} />
-          <Route path="/mypets" element={<MyPets />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/details" element={<PetDetails />} />
-          <Route path="/myadopts" element={<MyAdopts />} />
-          <Route path="/pets" element={<Pets />} />
-        </Routes>
-        <ModalPets />
-      </ModalProvider>
+      <UserProvider>
+        <ModalProvider>
+          <Routes>
+            <Route path="/" element={<Content />} />
+            <Route path="/mypets" element={<MyPets />} />
+            <Route path="/user/profile" element={<Profile />} />
+            <Route path="/details" element={<PetDetails />} />
+            <Route path="/myadopts" element={<MyAdopts />} />
+            <Route path="/pets" element={<Pets />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+          <ModalPets />
+        </ModalProvider>
+      </UserProvider>
     </Router>
   );
 }

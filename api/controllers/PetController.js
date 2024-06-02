@@ -8,7 +8,7 @@ const ObjectId = require("mongoose").Types.ObjectId;
 module.exports = class PetController {
   // create a pet
   static async create(req, res) {
-    const { name, age, weight, color } = req.body;
+    const { name, age, weight, gender, color } = req.body;
     const images = req.files;
 
     const available = true;
@@ -31,6 +31,10 @@ module.exports = class PetController {
       return;
     }
 
+    if (!gender) {
+      res.status(422).json({ message: "Gender is required" })
+    }
+
     if (!color) {
       res.status(422).json({ message: "Color is required" });
       return;
@@ -49,6 +53,7 @@ module.exports = class PetController {
       name,
       age,
       weight,
+      gender,
       color,
       available,
       image: [],
@@ -154,7 +159,7 @@ module.exports = class PetController {
 
   static async updatePet(req, res) {
     const id = req.params.id;
-    const { name, age, weight, color, available } = req.body;
+    const { name, age, weight, gender, color, available } = req.body;
     const images = req.files;
     const updateData = {};
 
@@ -198,6 +203,13 @@ module.exports = class PetController {
       return;
     } else {
       updateData.weight = weight;
+    }
+
+    if (!gender) {
+      res.status(422).json({ message: "Gender is required" });
+      return;
+    } else {
+      updateData.gender = gender;
     }
 
     if (!color) {

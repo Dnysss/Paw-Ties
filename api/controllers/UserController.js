@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const createUserToken = require("../helpers/create-user-token");
 const getToken = require("../helpers/get-token");
 const getUserByToken = require("../helpers/get-user-by-token");
+const { bucket } = require("../firebase/firebaseConfig");
 
 module.exports = class UserController {
   static async register(req, res) {
@@ -143,9 +144,55 @@ module.exports = class UserController {
 
     // upload images
     if (req.file) {
-      user.image = req.file.filename;
-    }
+      try {
+        const blob = bucket.file(
+          `users/${id}/${Date.now()}_${req.file.originalname}`
+        );
+        const blobStream = blob.createWriteStream({
+          metadata: {
+            contentType: req.file.mimetype,
+          },
+        });
 
+        blobStream.on("error", (err) => {
+          console.error(err);
+          res.status(500).json({ message: "Failed to upload image." });
+          return;
+        });
+
+        blobStream.on("finish", async () => {
+          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+          user.image = publicUrl;
+
+          // Continue updating other user information and saving to the database
+          await UserController.updateUser(
+            user,
+            { name, email, phone, password, confirmPassword },
+            res
+          );
+        });
+
+        blobStream.end(req.file.buffer);
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Something went wrong!" });
+        return;
+      }
+    } else {
+      // Continue updating other user information and saving to the database
+      await UserController.updateUser(
+        user,
+        { name, email, phone, password, confirmPassword },
+        res
+      );
+    }
+  }
+
+  static async updateUser(
+    user,
+    { name, email, phone, password, confirmPassword },
+    res
+  ) {
     if (!name) {
       res.status(422).json({ message: "Name is required" });
       return;
