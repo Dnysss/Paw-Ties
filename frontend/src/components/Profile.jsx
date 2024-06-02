@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import Footer from "./Footer";
 import Nav from "./Nav";
 
-import userImg from "./../assets/images/user.png";
 import Message from "./Message";
 import Input from "./form/Input";
 
@@ -81,7 +80,7 @@ function Profile() {
                 src={
                   preview
                     ? URL.createObjectURL(preview)
-                    : `http://localhost:3000/images/users/${user.image}`
+                    : user.image
                 }
                 alt={user.name}
               />
