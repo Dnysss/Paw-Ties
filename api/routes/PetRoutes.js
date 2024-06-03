@@ -8,7 +8,7 @@ const { imageUpload } = require("./../helpers/image-upload");
 router.post(
   "/create",
   verifyToken,
-  imageUpload.array("image"),
+  imageUpload.array("images"),
   PetController.create
 );
 router.get("/", PetController.getAll);
@@ -19,7 +19,7 @@ router.delete("/:id", verifyToken, PetController.removePetById);
 router.patch(
   "/:id",
   verifyToken,
-  imageUpload.array("image"),
+  imageUpload.array("images"),
   PetController.updatePet
 );
 router.patch("/schedule/:id", verifyToken, PetController.schedule);

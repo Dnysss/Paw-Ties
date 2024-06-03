@@ -1,12 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { useModal } from "./ModalContext";
 
+import api from "../../../utils/api";
+import useFlashMessage from "../../../hooks/useFlashMessage";
+import Input from "../form/Input";
+import Select from "../form/Select";
+import Message from "../Message";
+
 Modal.setAppElement("#root");
 
-function ModalPets() {
+function ModalPets({ handleSubmit, petData }) {
+  const [pet, setPet] = useState(petData || {});
+  const [preview, setPreview] = useState([]);
+  const [token] = useState(localStorage.getItem("token") || "");
+  const { setFlashMessage } = useFlashMessage();
+  const genders = ["Female", "Male"];
   const { isOpen, closeModal } = useModal();
+
+  function handleChange(e) {
+    setPet({ ...pet, [e.target.name]: e.target.value });
+  }
+
+  function onFileChange(e) {
+    setPreview(Array.from(e.target.files));
+    setPet({ ...pet, images: [...e.target.files] });
+  }
+
+  function handleGender(e) {
+    setPet({ ...pet, gender: e.target.options[e.target.selectedIndex].text });
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    let msgType = "success";
+
+    const formData = new FormData();
+
+    await Object.keys(pet).forEach((key) => {
+      if (key === "images") {
+        for (let i = 0; i < pet[key].length; i++) {
+          formData.append("images", pet[key][i]);
+        }
+      } else {
+        formData.append(key, pet[key]);
+      }
+    });
+
+    const data = await api
+      .post("pets/create", formData, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((error) => {
+        msgType = "error";
+        return error.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  }
 
   return (
     <Modal
@@ -22,6 +80,7 @@ function ModalPets() {
             <h3 className="text-xl font-semibold text-[#002A48]">
               Register Pet
             </h3>
+
             <button
               type="button"
               onClick={closeModal}
@@ -32,110 +91,95 @@ function ModalPets() {
             </button>
           </div>
           <div className="p-4 md:p-5 overflow-y-auto max-h-96">
-            <form className="space-y-4" action="#">
-              <img
-                className="w-24 h-24 mb-3 rounded-lg shadow-lg"
-                src="#"
-                alt="image"
-              />
+            <form onSubmit={handleSubmit} className="space-y-4" action="#">
+              <Message />
+              <div className="flex overflow-x-auto w-full">
+                {preview.length > 0
+                  ? preview.map((image, index) => (
+                      <img
+                        className="w-24 h-24 mb-3 ml-2 rounded-lg shadow-lg"
+                        src={URL.createObjectURL(image)}
+                        alt={pet.name}
+                        key={`${pet.name}+${index}`}
+                      />
+                    ))
+                  : pet.images &&
+                    pet.images.map((image, index) => (
+                      <img
+                        className="w-24 h-24 mb-3 rounded-lg shadow-lg"
+                        src={pet.images}
+                        alt={pet.name}
+                        key={`${pet.name}+${index}`}
+                      />
+                    ))}
+              </div>
               <label
-                class="block mb-2 text-sm font-medium text-gray-900"
-                for="user_avatar"
+                className="block mb-2 text-sm font-medium text-gray-900"
+                htmlFor="avatar"
               >
                 Upload file
               </label>
 
               <div>
-                <input
-                  className="block w-full text-sm text-gray-900 border rounded-lg cursor-pointer bg-gray-300 focus:outline-none border-gray-600 placeholder-gray-400"
-                  aria-describedby="user_avatar_help"
-                  id="user_avatar"
+                <Input
                   type="file"
+                  name="avatar"
+                  handleOnChange={onFileChange}
+                  multiple={true}
                 />
               </div>
-              
+
               <div>
-                <label
-                  htmlFor="name"
-                  className="block mb-2 text-sm font-medium text-[#002A48]"
-                >
-                  Name
-                </label>
-                <input
+                <Input
+                  text="Name"
                   type="text"
                   name="name"
-                  id="name"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
-                  placeholder="Enter Name"
-                  required
+                  placeholder="Name"
+                  handleOnChange={handleChange}
+                  value={pet.name || ""}
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="weight"
-                  className="block mb-2 text-sm font-medium text-[#002A48]"
-                >
-                  Weight
-                </label>
-                <input
-                  type="text"
+                <Input
+                  text="Weight"
+                  type="number"
                   name="weight"
-                  id="weight"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
                   placeholder="Weight"
-                  required
+                  handleOnChange={handleChange}
+                  value={pet.weight || ""}
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="gender"
-                  className="block mb-2 text-sm font-medium text-[#002A48]"
-                >
-                  Gender
-                </label>
-                <input
-                  type="text"
+                <Select
                   name="gender"
-                  id="gender"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
-                  placeholder="Gender"
-                  required
+                  text="Gender"
+                  options={genders}
+                  handleOnChange={handleGender}
+                  value={pet.gender || ""}
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="age"
-                  className="block mb-2 text-sm font-medium text-[#002A48]"
-                >
-                  Age
-                </label>
-                <input
-                  type="text"
+                <Input
+                  text="Age"
+                  type="number"
                   name="age"
-                  id="age"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
-                  placeholder="Enter Age"
-                  required
+                  placeholder="Age"
+                  handleOnChange={handleChange}
+                  value={pet.age || ""}
                 />
               </div>
 
               <div>
-                <label
-                  htmlFor="text"
-                  className="block mb-2 text-sm font-medium text-[#002A48]"
-                >
-                  Color
-                </label>
-                <input
+                <Input
+                  text="Color"
                   type="text"
-                  name="text"
-                  id="text"
-                  className="text-gray-900 text-sm rounded-lg block w-full p-2.5 bg-neutral-300 placeholder-gray-400"
+                  name="color"
                   placeholder="Color"
-                  required
+                  handleOnChange={handleChange}
+                  value={pet.color || ""}
                 />
               </div>
 

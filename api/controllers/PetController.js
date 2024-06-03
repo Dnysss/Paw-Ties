@@ -1,3 +1,7 @@
+const firebase = require("../firebase/firebaseConfig");
+const { bucket } = require("../firebase/firebaseConfig");
+const { v4: uuidv4 } = require("uuid");
+
 const Pet = require("../models/Pet");
 
 // helpers
@@ -12,8 +16,6 @@ module.exports = class PetController {
     const images = req.files;
 
     const available = true;
-
-    // image upload
 
     // validations
     if (!name) {
@@ -32,7 +34,7 @@ module.exports = class PetController {
     }
 
     if (!gender) {
-      res.status(422).json({ message: "Gender is required" })
+      res.status(422).json({ message: "Gender is required" });
     }
 
     if (!color) {
@@ -65,15 +67,35 @@ module.exports = class PetController {
       },
     });
 
-    images.map((image) => {
-      pet.images.push(image.filename);
-    });
-
     try {
-      const newPet = await pet.save();
-      res.status(201).json({ message: "Pet registered successfully!", newPet });
+      // Upload each image to Firebase Storage
+      for (const image of images) {
+        const blob = bucket.file(`pets/${Date.now()}_${image.originalname}`);
+        const blobStream = blob.createWriteStream({
+          metadata: {
+            contentType: image.mimetype,
+          },
+        });
+
+        blobStream.on('error', (err) => {
+          console.log(err);
+          throw new Error("Unable to upload image");
+        });
+
+        blobStream.on('finish', async () => {
+          const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+          pet.images.push(publicUrl);
+
+          if (pet.images.length === images.length) {
+            const newPet = await pet.save();
+            res.status(201).json({ message: "Pet registered successfully!", newPet });
+          }
+        });
+
+        blobStream.end(image.buffer);
+      }
     } catch (err) {
-      res.status(500).json({ message: err });
+      res.status(500).json({ message: err.message });
     }
   }
 
@@ -219,15 +241,26 @@ module.exports = class PetController {
       updateData.color = color;
     }
 
-    if (images.length === 0) {
+    if (!images || images.length === 0) {
       res.status(422).json({ message: "Image is required" });
       return;
     } else {
       updateData.images = [];
-      images.map((image) => {
-        updateData.images.push(image.filename);
-      });
+
+      for (const file of images) {
+        const filename = `pets/${id}/${Date.now()}_${file.originalname}`;
+        const fileRef = bucket.file(filename);
+        await fileRef.save(file.buffer, {
+          metadata: { contentType: file.mimetype },
+          public: true,
+          metadata: { firebaseStorageDownloadTokens: uuidv4() },
+        });
+        updateData.images.push(
+          `https://storage.googleapis.com/${bucket.name}/${filename}`
+        );
+      }
     }
+
     await Pet.findByIdAndUpdate(id, updateData);
     res.status(200).json({ message: "Pet updated successfully" });
   }

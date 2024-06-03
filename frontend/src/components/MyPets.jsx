@@ -5,8 +5,10 @@ import { pets } from "../data";
 
 import { MdDelete } from "react-icons/md";
 import { MdEditSquare } from "react-icons/md";
+import { useState } from "react";
 
 function MyPets() {
+  const [pets, setPets] = useState([]);
   const { openModal } = useModal();
   const { name, img } = pets;
   return (
@@ -15,9 +17,11 @@ function MyPets() {
       <div className="flex flex-col md:flex-row justify-between items-center bg-white p-6 space-y-4 md:space-y-0">
         <div className="text-center md:text-left">
           <h2 className="text-lg font-bold text-[#002A48]">My Pets</h2>
-          <p className="text-sm text-gray-500 mb-6">
-            There are no pets registered yet
-          </p>
+          {pets.length === 0 && (
+            <p className="text-sm text-gray-500 mb-6">
+              There are no pets registered yet
+            </p>
+          )}
         </div>
         <button
           onClick={openModal}
