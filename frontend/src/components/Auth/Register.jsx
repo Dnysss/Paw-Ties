@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import Nav from "./../Nav";
 import Footer from "./../Footer";
 import Input from "../form/Input";
-import Message from "../Message";
 
 import { Context } from "../../../context/UserContext";
 
@@ -25,7 +24,6 @@ function Register() {
   return (
     <>
       <Nav bgColorClass="bg-white" />
-      <Message />
       <div className="p-4 flex justify-center mb-10">
         <div className="w-full max-w-sm border border-gray-200 rounded-lg shadow-lg">
           <form

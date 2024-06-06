@@ -1,2 +1,5 @@
 import EventEmitter from "events";
-export default new EventEmitter();
+const bus = new EventEmitter();
+bus.setMaxListeners(20); // Aumenta o Limite de Listeners
+export default bus;
+

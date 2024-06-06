@@ -24,7 +24,7 @@ function App() {
             <Route path="/" element={<Content />} />
             <Route path="/mypets" element={<MyPets />} />
             <Route path="/user/profile" element={<Profile />} />
-            <Route path="/details" element={<PetDetails />} />
+            <Route path="/pet/:id" element={<PetDetails />} />
             <Route path="/myadopts" element={<MyAdopts />} />
             <Route path="/pets" element={<Pets />} />
             <Route path="/login" element={<Login />} />
