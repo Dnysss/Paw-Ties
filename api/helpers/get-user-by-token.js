@@ -1,17 +1,31 @@
-const jwt = require('jsonwebtoken');
-const User = require('./../models/User');
+const jwt = require("jsonwebtoken");
+const User = require("../models/User");
+require("dotenv").config;
 
-//get user by jwt token
-const getUserByToken = async (token) => {
-    if(!token) {
-        res.status(401).json({ message: "Acess denied"});
-    }
+async function getUserByToken(token) {
+  if (!token) {
+    throw new Error("Token not provided");
+  }
 
-    const decode = jwt.verify(token, "mysecretpassword");
-    const userId = decode.id;
-    const user = await User.findOne({ _id: userId });
+  let decoded;
+  try {
+    decoded = jwt.verify(token, "mysecretpassword");
+  } catch (error) {
+    throw new Error("Invalid token");
+  }
 
-    return user;
+  const userId = decoded.id;
+
+  if (!userId || typeof userId !== "string" || userId.length !== 24) {
+    throw new Error("Invalid user ID in token");
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  return user;
 }
 
 module.exports = getUserByToken;

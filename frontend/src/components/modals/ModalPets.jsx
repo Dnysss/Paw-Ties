@@ -48,22 +48,26 @@ function ModalPets({ handleSubmit, petData }) {
       }
     });
 
-    const data = await api
-      .post("pets/create", formData, {
+    try {
+      const response = await api.post("pets/create", formData, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
           "Content-Type": "multipart/form-data",
         },
-      })
-      .then((response) => {
-        return response.data;
-      })
-      .catch((error) => {
-        msgType = "error";
-        return error.response.data;
       });
-
-    setFlashMessage(data.message, msgType);
+  
+      const data = response.data;
+      setFlashMessage(data.message, msgType);
+    } catch (error) {
+      msgType = "error";
+      // Verifique se error.response e error.response.data existem
+      if (error.response && error.response.data) {
+        setFlashMessage(error.response.data.message, msgType);
+      } else {
+        // Trate outros tipos de erro (como erros de rede)
+        setFlashMessage("An unexpected error occurred", msgType);
+      }
+    }
   }
 
   return (
@@ -74,7 +78,7 @@ function ModalPets({ handleSubmit, petData }) {
       className="fixed inset-0 z-50 flex items-center justify-center"
       overlayClassName="fixed inset-0 bg-black bg-opacity-50"
     >
-      <div className="relative p-4 w-full max-w-md max-h-full ">
+      <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow">
           <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
             <h3 className="text-xl font-semibold text-[#002A48]">
@@ -91,7 +95,7 @@ function ModalPets({ handleSubmit, petData }) {
             </button>
           </div>
           <div className="p-4 md:p-5 overflow-y-auto max-h-96">
-            <form onSubmit={handleSubmit} className="space-y-4" action="#">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <Message />
               <div className="flex overflow-x-auto w-full">
                 {preview.length > 0

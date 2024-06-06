@@ -35,6 +35,7 @@ module.exports = class PetController {
 
     if (!gender) {
       res.status(422).json({ message: "Gender is required" });
+      return;
     }
 
     if (!color) {
@@ -77,18 +78,20 @@ module.exports = class PetController {
           },
         });
 
-        blobStream.on('error', (err) => {
+        blobStream.on("error", (err) => {
           console.log(err);
           throw new Error("Unable to upload image");
         });
 
-        blobStream.on('finish', async () => {
+        blobStream.on("finish", async () => {
           const publicUrl = `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
           pet.images.push(publicUrl);
 
           if (pet.images.length === images.length) {
             const newPet = await pet.save();
-            res.status(201).json({ message: "Pet registered successfully!", newPet });
+            res
+              .status(201)
+              .json({ message: "Pet registered successfully!", newPet });
           }
         });
 
@@ -106,13 +109,25 @@ module.exports = class PetController {
   }
 
   static async getAllUserPets(req, res) {
-    // get user from token
-    const token = getToken(req);
-    const user = await getUserByToken(token);
+    try {
+      // get user from token
+      const token = getToken(req);
+      if (!token) {
+        return res.status(401).json({ message: "Token not provided" });
+      }
 
-    const pets = await Pet.find({ "user._id": user._id }).sort("-createdAt");
+      const user = await getUserByToken(token);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
 
-    res.status(200).json({ pets });
+      const pets = await Pet.find({ "user._id": user._id }).sort("-createdAt");
+
+      res.status(200).json({ pets });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 
   static async getAllUserAdoptions(req, res) {
@@ -241,10 +256,7 @@ module.exports = class PetController {
       updateData.color = color;
     }
 
-    if (!images || images.length === 0) {
-      res.status(422).json({ message: "Image is required" });
-      return;
-    } else {
+    if (images.length > 0) {
       updateData.images = [];
 
       for (const file of images) {

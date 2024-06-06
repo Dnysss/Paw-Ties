@@ -38,11 +38,11 @@ function MyPets() {
     const data = await api
       .delete(`/pets/${id}`, {
         headers: {
-          Authorization: `Bere ${JSON.parse(token)}`,
+          Authorization: `Bearer ${JSON.parse(token)}`,
         },
       })
       .then((response) => {
-        const updatedPets = pets.filter((pet) => pet._id != id);
+        const updatedPets = pets.filter((pet) => pet._id !== id);
         setPets(updatedPets);
 
         return response.data;
@@ -109,10 +109,10 @@ function MyPets() {
                           <FaCheckCircle className="w-4 h-4" />
                         </Link>
                       )}
-                      <button className="flex items-center bg-[#002A48] shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mr-2 mb-2 sm:mb-0 hover:bg-blue-900 transition duration-300">
+                      <Link to={`/pet/edit/${pet._id}`} className="flex items-center bg-[#002A48] shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mr-2 mb-2 sm:mb-0 hover:bg-blue-900 transition duration-300">
                         <div className="mr-1">Edit</div>
                         <MdEditSquare className="w-4 h-4" />
-                      </button>
+                      </Link>
 
                       <button
                         onClick={() => {
