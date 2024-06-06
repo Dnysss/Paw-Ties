@@ -1,19 +1,18 @@
 import Footer from "./Footer";
 import Nav from "./Nav";
 import Message from "./Message";
+
 import { useModal } from "./modals/ModalContext";
 
 import { FaCheckCircle } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
 import { MdEditSquare } from "react-icons/md";
-
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-
 
 import useFlashMessage from "../../hooks/useFlashMessage";
 
 import api from "../../utils/api";
-import { Link } from "react-router-dom";
 
 function MyPets() {
   const [pets, setPets] = useState([]);
@@ -32,6 +31,29 @@ function MyPets() {
         setPets(response.data.pets);
       });
   }, [token]);
+
+  async function removePet(id) {
+    let msgType = "success";
+
+    const data = await api
+      .delete(`/pets/${id}`, {
+        headers: {
+          Authorization: `Bere ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        const updatedPets = pets.filter((pet) => pet._id != id);
+        setPets(updatedPets);
+
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  }
 
   return (
     <>
@@ -53,18 +75,20 @@ function MyPets() {
         </button>
       </div>
 
-      <div className="container mx-auto p-4 min-h-svh max-w-[1300px]">
+      <Message />
+
+      <div className="container mx-auto p-4 px-10 min-h-svh max-w-[1300px]">
         {pets.map((pet) => {
           return (
             <div
               key={pet._id}
-              className="relative flex flex-col items-center border border-solid border-gray-200 rounded-2xl transition-all duration-500 md:flex-row shadow-md mb-10"
+              className="flex flex-col items-center rounded-2xl transition-all duration-500 md:flex-row mb-10 border-b-4 border-[#002A48] shadow-lg bg-yellow-300"
             >
-              <div className="block overflow-hidden md:w-52 h-48">
+              <div className="flex items-center justify-center  md:w-44 h-44">
                 <img
                   src={pet.images[0]}
-                  alt="Card image"
-                  className="h-full rounded-2xl object-cover"
+                  className="w-24 h-24 rounded-full shadow-lg"
+                  alt="Bonnie image"
                 />
               </div>
 
@@ -77,7 +101,10 @@ function MyPets() {
                   {pet.available ? (
                     <>
                       {pet.adopter && (
-                        <Link to="/" className="flex items-center bg-[#002A48] shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mr-2 mb-2 sm:mb-0 hover:bg-blue-900 transition duration-300">
+                        <Link
+                          to="/"
+                          className="flex items-center bg-[#002A48] shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mr-2 mb-2 sm:mb-0 hover:bg-blue-900 transition duration-300"
+                        >
                           <div className="mr-1">Conclir adoção</div>
                           <FaCheckCircle className="w-4 h-4" />
                         </Link>
@@ -87,7 +114,12 @@ function MyPets() {
                         <MdEditSquare className="w-4 h-4" />
                       </button>
 
-                      <button className="flex items-center bg-red-500 shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mb-2 sm:mb-0 hover:bg-red-400 transition duration-300">
+                      <button
+                        onClick={() => {
+                          removePet(pet._id);
+                        }}
+                        className="flex items-center bg-red-500 shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mb-2 sm:mb-0 hover:bg-red-400 transition duration-300"
+                      >
                         <div className="mr-1">Delete</div>
                         <MdDelete className="w-4 h-4" />
                       </button>
