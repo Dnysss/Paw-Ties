@@ -10,7 +10,7 @@ import { Context } from "../../context/UserContext";
 
 
 function Nav({ bgColorClass = "bg-[#F8D629]" }) {
-  const { authenticated, logout, logoutLoading } = useContext(Context);
+  const { authenticated, logout, loading, logoutLoading } = useContext(Context);
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => {

@@ -68,8 +68,8 @@ export default function useAuth() {
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = undefined;
     navigate("/");
-    setLogoutLoading(false);
+    setTimeout(() => setLogoutLoading(false), 1000);
   }
 
-  return { authenticated, register, logout, login, loading, logoutLoading};
+  return { authenticated, register, logout, login, loading, logoutLoading };
 }
