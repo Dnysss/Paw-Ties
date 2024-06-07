@@ -307,7 +307,7 @@ module.exports = class PetController {
 
     // check if user has already scheduled a visit
     if (pet.adopter) {
-      if (pet.adopter._id.equals(user._id)) {
+      if (new ObjectId(pet.adopter._id).equals(new ObjectId(user._id))) {
         res.status(422).json({
           message: "Sorry, have you already scheduled a visit for this pet",
         });

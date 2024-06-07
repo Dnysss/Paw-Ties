@@ -40,13 +40,21 @@ function PetDetails() {
   async function schedule() {
     let msgType = "success";
 
-    try {
-      const response = await api.patch(`/pets/schedule/${pet._id}`);
-      setFlashMessage(response.data.message, msgType);
-    } catch (err) {
-      msgType = "error";
-      setFlashMessage(err.response.data.message, msgType);
-    }
+    const data = await api
+      .patch(`pets/schedule/${pet._id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
   }
 
   if (loading) {

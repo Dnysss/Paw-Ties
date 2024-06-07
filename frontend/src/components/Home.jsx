@@ -19,7 +19,7 @@ function Home() {
         setPets(response.data.pets);
         setTimeout(() => {
           setLoading(false);
-        }, 2000);
+        }, 1000);
       })
       .catch(() => {
         setLoading(false); // Mesmo em caso de erro, pare o carregamento
