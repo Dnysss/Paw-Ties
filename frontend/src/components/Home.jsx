@@ -6,14 +6,29 @@ import api from "../../utils/api";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+import FullScreenSpinner from "./FullScreenSpinner";
+
 function Home() {
   const [pets, setPets] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get("/pets").then((response) => {
-      setPets(response.data.pets);
-    });
+    api
+      .get("/pets")
+      .then((response) => {
+        setPets(response.data.pets);
+        setTimeout(() => {
+          setLoading(false);
+        }, 2000);
+      })
+      .catch(() => {
+        setLoading(false); // Mesmo em caso de erro, pare o carregamento
+      });
   }, []);
+
+  if (loading) {
+    return <FullScreenSpinner />;
+  }
 
   return (
     <div className="mb-14">

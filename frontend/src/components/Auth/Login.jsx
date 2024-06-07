@@ -8,18 +8,25 @@ import Message from "../Message";
 
 import { Context } from "../../../context/UserContext";
 
+import { IoPawSharp } from "react-icons/io5";
 
 function Login() {
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
   const { login } = useContext(Context);
 
   function handleChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    login(user);
+    setLoading(true);
+    try {
+      await login(user);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -56,9 +63,16 @@ function Login() {
             <div>
               <button
                 type="submit"
-                className="w-full mt-4 text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className={`w-full mt-4 text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+                  loading ? "cursor-not-allowed" : ""
+                }`}
+                disabled={loading}
               >
-                Login
+                {loading ? (
+                  <IoPawSharp className="animate-spin mx-auto" />
+                ) : (
+                  "Login"
+                )}
               </button>
             </div>
           </form>

@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [logoutLoading, setLogoutLoading] = useState(false);
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
 
@@ -16,6 +18,7 @@ export default function useAuth() {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
       setAuthenticated(true);
     }
+    setLoading(false); // Garantir que o estado de carregamento inicial seja definido corretamente
   }, []);
 
   async function register(user) {
@@ -60,11 +63,13 @@ export default function useAuth() {
   }
 
   function logout() {
+    setLogoutLoading(true);
     setAuthenticated(false);
     localStorage.removeItem("token");
     api.defaults.headers.Authorization = undefined;
     navigate("/");
+    setLogoutLoading(false);
   }
 
-  return { authenticated, register, logout, login };
+  return { authenticated, register, logout, login, loading, logoutLoading};
 }
