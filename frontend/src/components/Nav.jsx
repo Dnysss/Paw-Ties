@@ -1,5 +1,5 @@
 import logo from "./../assets/images/logo.png";
-import FullScreenSpinner from "./FullScreenSpinner";
+import FullScreenSpinner from "./loading/FullScreenSpinner";
 
 import { TiThMenu } from "react-icons/ti";
 

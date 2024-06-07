@@ -33,7 +33,6 @@ function ModalPets({ handleSubmit, petData }) {
   }
 
   async function handleSubmit(e) {
-    e.preventDefault();
     let msgType = "success";
 
     const formData = new FormData();

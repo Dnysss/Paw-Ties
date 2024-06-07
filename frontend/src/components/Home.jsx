@@ -6,7 +6,7 @@ import api from "../../utils/api";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import FullScreenSpinner from "./FullScreenSpinner";
+import FullScreenSpinner from "./loading/FullScreenSpinner";
 
 function Home() {
   const [pets, setPets] = useState([]);

@@ -14,7 +14,7 @@ import img2 from "./../assets/images/catDog.png";
 import Nav from "./Nav";
 import Footer from "./Footer";
 import Message from "./Message";
-import FullScreenSpinner from "./FullScreenSpinner";
+import FullScreenSpinner from "./loading/FullScreenSpinner";
 
 function PetDetails() {
   const [pet, setPet] = useState({});
