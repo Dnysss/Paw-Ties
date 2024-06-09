@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 
 import FullScreenSpinner from "./loading/FullScreenSpinner";
 
+import imgHome from "./../assets/images/img1.png";
+
 function Home() {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ function Home() {
 
   return (
     <div className="mb-14">
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white p-11 rounded-lg space-y-4 md:space-y-0">
+      <div className="flex mx-auto max-w-screen-xl flex-col md:flex-row justify-between items-center bg-white p-11 rounded-lg space-y-4 md:space-y-0">
         <div className="text-center md:text-left">
           <p className="text-sm text-gray-500">Whats new?</p>
           <h2 className="text-lg font-bold text-[#002A48]">
@@ -48,7 +50,7 @@ function Home() {
       </div>
       {pets.length > 0 && (
         <div className="container mx-auto p-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 px-10">
             {pets.slice(0, 8).map((pet) => (
               <div
                 key={pet._id}
@@ -88,6 +90,14 @@ function Home() {
               </p>
             )}
           </div>
+        </div>
+      )}
+      {pets.length === 0 && (
+        <div className="flex justify-center items-center flex-col p-20">
+          <p className="text-sm text-gray-500 mb-6">
+            There are no pets registered yet
+          </p>
+          <img src={imgHome} alt="no pets" className="" />
         </div>
       )}
     </div>

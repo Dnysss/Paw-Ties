@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import Modal from "react-modal";
 import { useModal } from "./ModalContext";
@@ -19,6 +19,13 @@ function ModalPets({ handleSubmit, petData }) {
   const genders = ["Female", "Male"];
   const { isOpen, closeModal } = useModal();
 
+  useEffect(() => {
+    if(!isOpen) {
+      setPet({});
+      setPreview([]);
+    }
+  }, [isOpen])
+
   function handleChange(e) {
     setPet({ ...pet, [e.target.name]: e.target.value });
   }
@@ -33,6 +40,7 @@ function ModalPets({ handleSubmit, petData }) {
   }
 
   async function handleSubmit(e) {
+    e.preventDefault();
     let msgType = "success";
 
     const formData = new FormData();
@@ -54,9 +62,16 @@ function ModalPets({ handleSubmit, petData }) {
           "Content-Type": "multipart/form-data",
         },
       });
-  
+
       const data = response.data;
       setFlashMessage(data.message, msgType);
+
+      // Clear form fields
+      setPet({});
+      setPreview([]);
+
+      // Close the modal
+      closeModal();
     } catch (error) {
       msgType = "error";
       // Verifique se error.response e error.response.data existem
@@ -79,7 +94,7 @@ function ModalPets({ handleSubmit, petData }) {
     >
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow">
-          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+          <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-300">
             <h3 className="text-xl font-semibold text-[#002A48]">
               Register Pet
             </h3>

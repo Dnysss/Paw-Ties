@@ -132,12 +132,28 @@ module.exports = class PetController {
 
   static async getAllUserAdoptions(req, res) {
     // get user from token
-    const token = getToken(req);
-    const user = await getUserByToken(token);
+    try {
+      // get user from token
+      const token = getToken(req);
+      if (!token) {
+        return res.status(401).json({ message: "Token not provided" });
+      }
 
-    const pets = await Pet.find({ "adopter._id": user._id }).sort("-createdAt");
+      const user = await getUserByToken(token);
+      if (!user) {
+        return res.status(401).json({ message: "Invalid token" });
+      }
 
-    res.status(200).json({ pets });
+      const pets = await Pet.find({ "adopter._id": user._id }).sort(
+        "-createdAt"
+      );
+
+
+      res.status(200).json({ pets });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 
   static async getPetById(req, res) {
@@ -305,8 +321,9 @@ module.exports = class PetController {
       return;
     }
 
-    // check if user has already scheduled a visit
+    // check if user has already scheduled a +
     if (pet.adopter) {
+      // convertendo os IDs para ObjectId antes de compará-los
       if (new ObjectId(pet.adopter._id).equals(new ObjectId(user._id))) {
         res.status(422).json({
           message: "Sorry, have you already scheduled a visit for this pet",
@@ -317,7 +334,7 @@ module.exports = class PetController {
 
     // add user to pet
     pet.adopter = {
-      _id: user.id,
+      _id: user._id,
       name: user.name,
       image: user.image,
     };

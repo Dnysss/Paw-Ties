@@ -13,6 +13,8 @@ import { useEffect, useState } from "react";
 import useFlashMessage from "../../hooks/useFlashMessage";
 import ScreenSpinner from "./loading/ScreenSpinner";
 
+import imgMyPets from "./../assets/images/img3.png"
+
 import api from "../../utils/api";
 
 function MyPets() {
@@ -71,14 +73,10 @@ function MyPets() {
   return (
     <>
       <Nav bgColorClass="bg-white" />
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white p-6 space-y-4 md:space-y-0">
+      <div className="flex mx-auto max-w-screen-xl flex-col md:flex-row justify-between items-center bg-white p-6 space-y-4 md:space-y-0">
         <div className="text-center md:text-left">
           <h2 className="text-lg font-bold text-[#002A48]">My Pets</h2>
-          {!loading && pets.length === 0 && (
-            <p className="text-sm text-gray-500 mb-6">
-              There are no pets registered yet
-            </p>
-          )}
+          
         </div>
         <button
           onClick={openModal}
@@ -92,7 +90,7 @@ function MyPets() {
 
       <div className="container mx-auto p-4 px-10 min-h-svh max-w-[1300px]">
         {loading && (
-          <div className="flex items-center justify-center text-center bg-white bg-opacity-75 z-50">
+          <div className="flex items-center p-44 justify-center text-center bg-white bg-opacity-75 z-50">
             <ScreenSpinner />
           </div>
         )}
@@ -154,6 +152,14 @@ function MyPets() {
               </div>
             );
           })}
+          {!loading && pets.length === 0 && (
+            <div className="flex justify-center items-center flex-col p-20">
+              <p className="text-sm text-gray-500 mb-6">
+                There are no pets registered yet
+              </p>
+              <img src={imgMyPets} alt="" />
+            </div>
+          )}
       </div>
       <Footer />
     </>
