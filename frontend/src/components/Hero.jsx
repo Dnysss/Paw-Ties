@@ -14,12 +14,6 @@ function Hero() {
             who will always be with you to have fun. We have 200+ different pets
             that can meet your needs!
           </p>
-          <a
-            href="#"
-            className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center bg-[#003459] text-white rounded-3xl transition-all duration-300 hover:bg-[#001F36]"
-          >
-            Explore Now
-          </a>
         </div>
         <div className="lg:col-span-6 lg:flex lg:justify-end lg:items-center">
           <img src={imgHero} alt="mockup" />

@@ -12,8 +12,9 @@ import { useEffect, useState } from "react";
 
 import useFlashMessage from "../../hooks/useFlashMessage";
 import ScreenSpinner from "./loading/ScreenSpinner";
+import { FaCircleCheck } from "react-icons/fa6";
 
-import imgMyPets from "./../assets/images/img3.png"
+import imgMyPets from "./../assets/images/img3.png";
 
 import api from "../../utils/api";
 
@@ -70,13 +71,40 @@ function MyPets() {
     setFlashMessage(data.message, msgType);
   }
 
+  async function concludeAdoption(id) {
+    let msgType = "success";
+
+    const data = await api
+      .patch(`/pets/conclude/${id}`, {
+        headers: {
+          Authorization: `Bearer ${JSON.parse(token)}`,
+        },
+      })
+      .then((response) => {
+        const updatedPets = pets.map((pet) => {
+          if (pet._id === id) {
+            return { ...pet, available: false };
+          }
+
+          return pet;
+        });
+        setPets(updatedPets);
+        return response.data;
+      })
+      .catch((err) => {
+        msgType = "error";
+        return err.response.data;
+      });
+
+    setFlashMessage(data.message, msgType);
+  }
+
   return (
     <>
       <Nav bgColorClass="bg-white" />
       <div className="flex mx-auto max-w-screen-xl flex-col md:flex-row justify-between items-center bg-white p-6 space-y-4 md:space-y-0">
         <div className="text-center md:text-left">
           <h2 className="text-lg font-bold text-[#002A48]">My Pets</h2>
-          
         </div>
         <button
           onClick={openModal}
@@ -118,13 +146,15 @@ function MyPets() {
                     {pet.available ? (
                       <>
                         {pet.adopter && (
-                          <Link
-                            to="/"
-                            className="flex items-center bg-[#002A48] shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mr-2 mb-2 sm:mb-0 hover:bg-blue-900 transition duration-300"
+                          <button
+                            onClick={() => {
+                              concludeAdoption(pet._id);
+                            }}
+                            className="flex items-center bg-emerald-800 shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mr-2 mb-2 sm:mb-0 hover:bg-emerald-950 transition duration-300"
                           >
-                            <div className="mr-1">Conclir adoção</div>
+                            <div className="mr-2">Conclude adoption</div>
                             <FaCheckCircle className="w-4 h-4" />
-                          </Link>
+                          </button>
                         )}
                         <Link
                           to={`/pet/edit/${pet._id}`}
@@ -138,28 +168,31 @@ function MyPets() {
                           onClick={() => {
                             removePet(pet._id);
                           }}
-                          className="flex items-center bg-red-500 shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mb-2 sm:mb-0 hover:bg-red-400 transition duration-300"
+                          className="flex items-center bg-red-500 shadow-sm rounded-full py-2 px-5 text-xs text-white font-semibold mb-2 sm:mb-0 hover:bg-red-800 transition duration-300"
                         >
                           <div className="mr-1">Delete</div>
                           <MdDelete className="w-4 h-4" />
                         </button>
                       </>
                     ) : (
-                      <p>Pet already adopted</p>
+                      <div className="flex text-center justify-center items-center p-4 text-emerald-800">
+                        <p className="text-sm mr-2">Pet already adopted</p>
+                        <FaCircleCheck className="size-5" />
+                      </div>
                     )}
                   </div>
                 </div>
               </div>
             );
           })}
-          {!loading && pets.length === 0 && (
-            <div className="flex justify-center items-center flex-col p-20">
-              <p className="text-sm text-gray-500 mb-6">
-                There are no pets registered yet
-              </p>
-              <img src={imgMyPets} alt="" />
-            </div>
-          )}
+        {!loading && pets.length === 0 && (
+          <div className="flex justify-center items-center flex-col p-20">
+            <p className="text-sm text-gray-500 mb-6">
+              There are no pets registered yet
+            </p>
+            <img src={imgMyPets} alt="" />
+          </div>
+        )}
       </div>
       <Footer />
     </>

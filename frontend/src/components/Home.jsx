@@ -10,6 +10,8 @@ import FullScreenSpinner from "./loading/FullScreenSpinner";
 
 import imgHome from "./../assets/images/img1.png";
 
+import { FaCircleCheck } from "react-icons/fa6";
+
 function Home() {
   const [pets, setPets] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +80,10 @@ function Home() {
                       </button>
                     </Link>
                   ) : (
-                    <p className="text-sm text-gray-500">Adopted</p>
+                    <div className="flex justify-center items-center text-center mt-6 text-emerald-800">
+                      <p className="mr-1 text-lg font-semibold ">Adopted</p>
+                      <FaCircleCheck className="size-5" />
+                    </div>
                   )}
                 </div>
               </div>
