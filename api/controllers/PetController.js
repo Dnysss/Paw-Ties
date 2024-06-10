@@ -103,9 +103,34 @@ module.exports = class PetController {
   }
 
   static async getAll(req, res) {
-    const pets = await Pet.find().sort("-createdAt");
+    try {
+      // Obter página e limite dos parâmetros de consulta, padrão 1 e 10, respectivamente
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 10;
 
-    res.status(200).json({ pets: pets });
+      // Calcular o índice inicial
+      const startIndex = (page - 1) * limit;
+
+      // Obter o total de documentos de pets
+      const totalPets = await Pet.countDocuments();
+
+      // Recuperar pets com paginação
+      const pets = await Pet.find()
+        .sort("-createdAt")
+        .skip(startIndex)
+        .limit(limit)
+        .exec();
+
+      // Enviar resposta com pets paginados e metadados
+      res.status(200).json({
+        pets,
+        totalPages: Math.ceil(totalPets / limit),
+        currentPage: page,
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
   }
 
   static async getAllUserPets(req, res) {
@@ -147,7 +172,6 @@ module.exports = class PetController {
       const pets = await Pet.find({ "adopter._id": user._id }).sort(
         "-createdAt"
       );
-
 
       res.status(200).json({ pets });
     } catch (error) {

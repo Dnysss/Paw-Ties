@@ -103,7 +103,7 @@ function MyAdopts() {
             <p className="text-sm text-gray-500 mb-6">
               There are no pets registered yet
             </p>
-            <img src={imgMyAdopts} alt="find my adopts" />
+            <img className="" src={imgMyAdopts} alt="find my adopts" />
           </div>
         )}
       </div>
