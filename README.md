@@ -22,6 +22,9 @@
 ## Back-end
 - MongoDB Atlas
 - API REST
+- Multer
+- Firebase Storage
+- CORS
 
 # Como executar
 Antes de tudo, na sua máquina deverá ter:
