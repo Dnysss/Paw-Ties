@@ -99,11 +99,11 @@ function MyAdopts() {
           </div>
         )}
         {!loading && pets.length === 0 && (
-          <div className="flex justify-center items-center flex-col p-20">
-            <p className="text-sm text-gray-500 mb-6">
+          <div className="flex justify-center items-center flex-col pt-20">
+            <p className="text-sm text-gray-500 mb-6 ">
               There are no pets registered yet
             </p>
-            <img className="" src={imgMyAdopts} alt="find my adopts" />
+            <img src={imgMyAdopts} alt="find my adopts" />
           </div>
         )}
       </div>

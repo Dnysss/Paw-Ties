@@ -55,7 +55,7 @@ function Nav({ bgColorClass = "bg-[#F8D629]" }) {
                   className="block py-2 px-3 md:hover:bg-transparent md:border-0 text-[#002A48]  md:p-0  md:dark:hover:bg-transparent transition-all duration-300 hover:text-[#001F36]"
                   aria-current="page"
                 >
-                  Adopt
+                  Home
                 </Link>
               </li>
               <li>

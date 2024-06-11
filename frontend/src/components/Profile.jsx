@@ -45,7 +45,7 @@ function Profile() {
     Object.keys(user).forEach((key) => {
       formData.append(key, user[key]);
     });
-    
+
     const data = await api
       .patch(`/users/edit/${user._id}`, formData, {
         headers: {
@@ -77,24 +77,20 @@ function Profile() {
             {(user.image || preview) && (
               <img
                 className="w-24 h-24 mb-3 rounded-full shadow-lg"
-                src={
-                  preview
-                    ? URL.createObjectURL(preview)
-                    : user.image
-                }
+                src={preview ? URL.createObjectURL(preview) : user.image}
                 alt={user.name}
               />
             )}
 
             <label
               className="block mb-2 text-sm font-medium text-gray-900"
-              htmlFor="avatar"
+              htmlFor="image"
             >
               Upload file
             </label>
 
             <div className="w-72">
-              <Input type="file" name="avatar" handleOnChange={onFileChange} />
+              <Input type="file" name="image" handleOnChange={onFileChange} />
             </div>
 
             <div>

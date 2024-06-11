@@ -118,7 +118,7 @@ function MyPets() {
 
       <div className="container mx-auto p-4 px-10 min-h-svh max-w-[1300px]">
         {loading && (
-          <div className="flex items-center p-44 justify-center text-center bg-white bg-opacity-75 z-50">
+          <div className="flex items-center justify-center text-center bg-white z-50 pt-48">
             <ScreenSpinner />
           </div>
         )}
@@ -186,7 +186,7 @@ function MyPets() {
             );
           })}
         {!loading && pets.length === 0 && (
-          <div className="flex justify-center items-center flex-col p-20">
+          <div className="flex justify-center items-center flex-col pt-20">
             <p className="text-sm text-gray-500 mb-6">
               There are no pets registered yet
             </p>

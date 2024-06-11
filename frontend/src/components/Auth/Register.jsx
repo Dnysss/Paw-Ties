@@ -4,26 +4,35 @@ import { Link } from "react-router-dom";
 import Nav from "./../Nav";
 import Footer from "./../Footer";
 import Input from "../form/Input";
+import Message from "../Message";
 
 import { Context } from "../../../context/UserContext";
 
+import { CgSpinner } from "react-icons/cg";
 
 function Register() {
   const [user, setUser] = useState({});
+  const [loading, setLoading] = useState(false);
   const { register } = useContext(Context);
 
   function handleChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value });
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    register(user);
+    setLoading(true);
+    try {
+      await register(user);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
     <>
       <Nav bgColorClass="bg-white" />
+      <Message />
       <div className="p-4 flex justify-center mb-10">
         <div className="w-full max-w-sm border border-gray-200 rounded-lg shadow-lg">
           <form
@@ -43,7 +52,7 @@ function Register() {
                 handleOnChange={handleChange}
               />
             </div>
-            
+
             <div>
               <Input
                 text="E-mail"
@@ -87,9 +96,16 @@ function Register() {
             <div>
               <button
                 type="submit"
-                className="w-full mt-4 text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center"
+                className={`mt-4 h-10 w-28 text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+                  loading ? "cursor-not-allowed" : ""
+                }`}
+                disabled={loading}
               >
-                Register
+                {loading ? (
+                  <CgSpinner className="animate-spin mx-auto h-5 w-5" />
+                ) : (
+                  "Register"
+                )}
               </button>
             </div>
           </form>

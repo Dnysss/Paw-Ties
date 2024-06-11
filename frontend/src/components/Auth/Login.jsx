@@ -8,7 +8,7 @@ import Message from "../Message";
 
 import { Context } from "../../../context/UserContext";
 
-import { IoPawSharp } from "react-icons/io5";
+import { CgSpinner } from "react-icons/cg";
 
 function Login() {
   const [user, setUser] = useState({});
@@ -63,13 +63,13 @@ function Login() {
             <div>
               <button
                 type="submit"
-                className={`w-full mt-4 text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center ${
+                className={`mt-4 h-10 w-20 text-white bg-[#002A48] transition-all duration-300 hover:bg-[#001F36] focus:ring-4 focus:outline-none font-medium rounded-lg text-sm text-center ${
                   loading ? "cursor-not-allowed" : ""
                 }`}
                 disabled={loading}
               >
                 {loading ? (
-                  <IoPawSharp className="animate-spin mx-auto" />
+                  <CgSpinner className="animate-spin mx-auto h-5 w-5" />
                 ) : (
                   "Login"
                 )}
